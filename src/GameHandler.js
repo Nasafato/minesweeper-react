@@ -68,6 +68,7 @@ const initializeGameState = (maxX, maxY, totalMines) => {
   }
 }
 
+
 export default class GameHandler {
   constructor(difficulty) {
     let maxX = 8;
@@ -100,7 +101,31 @@ export default class GameHandler {
     return this.gameState;
   }
 
-  getNextGameState = () => {
+  getNextGameState = (coord) => {
+    const { board } = this.gameState;
+    const { x, y } = coord;
+    // If coord is a mine, set game state to lost
+    // Set all mines' state to isOpen
+    if (board[x][y].isMine) {
+      board[x][y].isOpen = true;
+      return {
+        board: board,
+        gameStatus: status.LOST
+      }
+    }
 
+    // If coord is empty, set square state to open
+    if (!board[x][y].isOpen) {
+      // TODO: Deep copy the board?
+      board[x][y].isOpen = true;
+      return {
+        ...this.gameState,
+        board
+      }
+    }
+
+
+
+    return this.gameState;
   }
 }

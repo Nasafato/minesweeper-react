@@ -23,7 +23,9 @@ export default class GameBoard extends React.Component {
   }
 
   onSquareClick = (e, coord) => {
-    console.log(coord);
+    this.setState({
+      gameState: this.gameHandler.getNextGameState(coord)
+    })
   }
 
   render() {

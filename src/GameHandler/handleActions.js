@@ -95,6 +95,7 @@ export const handleUncoverAction = (coord, board, gameState) => {
 
   return {
     ...gameState,
+    gameStatus: status.STARTED,
     board
   };
 };
@@ -148,6 +149,12 @@ export const handleChordAction = (coord, board, gameState) => {
 
     if (isMine) {
       // lose game
+      showMines(board);
+      return {
+        ...gameState,
+        gameStatus: status.LOST,
+        board
+      };
     }
 
     openSquare(neighborCoord, board);

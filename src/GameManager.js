@@ -1,5 +1,5 @@
 import React from "react";
-import GameHandler, { difficulties, status } from "./GameHandler";
+import GameHandler, { actions, difficulties, status } from "./GameHandler";
 import ClickManager from "./ClickManager";
 import GameSquare from "./GameSquare";
 
@@ -29,7 +29,9 @@ export default class GameManager extends React.Component {
     }
 
     const action = this.clickManager.onMouseUp(e, coord);
-
+    if (action === actions.NONE) {
+      return;
+    }
     this.setState({
       gameState: this.gameHandler.getNextGameState(coord, action)
     });

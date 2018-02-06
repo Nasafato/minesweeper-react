@@ -45,6 +45,44 @@ const createMines = (maxX, maxY, totalMines) => {
   return mines;
 };
 
+const getNeighbors = (x, y, board) => {
+  const maxX = board.length - 1;
+  const maxY = board[0].length - 1;
+  const minX = 0;
+  const minY = 0;
+  const neighborCoords = [];
+  if (x - 1 >= minX) {
+    neighborCoords.push({ x: x - 1, y });
+  }
+  if (x + 1 <= maxX) {
+    neighborCoords.push({ x: x + 1, y });
+  }
+  if (y - 1 >= minY) {
+    neighborCoords.push({ x, y: y - 1 });
+  }
+  if (y + 1 <= maxY) {
+    neighborCoords.push({ x, y: y + 1 });
+  }
+  return neighborCoords;
+};
+
+const updateNeighboringMinesCount = board => {
+  const updateNeighbors = (x, y) => {
+    const neighbors = getNeighbors(x, y, board);
+    if (!board[x][y].isMine) {
+      return;
+    }
+    neighbors.forEach(function updateNeighbor({ x: neighborX, y: neighborY }) {
+      board[neighborX][neighborY].neighboringMinesCount++;
+    });
+  };
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[i].length; j++) {
+      updateNeighbors(i, j);
+    }
+  }
+};
+
 const initializeGameState = (maxX, maxY, totalMines) => {
   const board = [];
   for (let i = 0; i < maxX; i++) {
@@ -55,6 +93,7 @@ const initializeGameState = (maxX, maxY, totalMines) => {
           x: i,
           y: j
         },
+        neighboringMinesCount: 0,
         isMine: false,
         isOpen: false,
         isFlagged: false
@@ -67,6 +106,9 @@ const initializeGameState = (maxX, maxY, totalMines) => {
     const { x, y } = mineCoord;
     board[x][y].isMine = true;
   });
+
+  updateNeighboringMinesCount(board);
+
   return {
     board,
     gameStatus: status.READY

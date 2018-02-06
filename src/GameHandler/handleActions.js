@@ -1,5 +1,10 @@
 import { status } from "./consts";
-import { iterateThroughBoard, getNeighbors } from "./utils";
+import {
+  iterateThroughBoard,
+  getNeighbors,
+  getSquare,
+  setSquare
+} from "./utils";
 
 // checkVictory examines the board and sees if the game is done
 // This means that every square that doesn't contain a mine
@@ -112,4 +117,53 @@ export const handleFlagAction = (coord, board, gameState) => {
     ...gameState,
     board
   };
+};
+
+export const handleChordAction = (coord, board, gameState) => {
+  const { x, y } = coord;
+  const { isOpen, neighboringMinesCount } = board[x][y];
+  // If it's not opened yet, we can't chord on it
+  // If there are no mines around it, you can't chord
+  if (!isOpen || neighboringMinesCount === 0) {
+    return gameState;
+  }
+
+  // Compare number of neighboring flags with number of mines
+  const neighbors = getNeighbors(x, y, board);
+  let neighboringFlagsCount = 0;
+  for (let i = 0; i < neighbors.length; i++) {
+    const neighbor = getSquare(board, neighbors[i]);
+    if (neighbor.isFlagged) {
+      neighboringFlagsCount++;
+    }
+  }
+
+  // If not equal, then you can't chord
+  if (neighboringFlagsCount !== neighboringMinesCount) {
+    return gameState;
+  }
+
+  // Now, uncover any unopened, unflagged neighbors
+  for (let i = 0; i < neighbors.length; i++) {
+    const neighborCoord = neighbors[i];
+    const { isFlagged, isOpen, isMine } = getSquare(board, neighborCoord);
+    if (isFlagged || isOpen) {
+      continue;
+    }
+
+    if (isMine) {
+      // lose game
+    }
+
+    openSquare(neighborCoord, board);
+  }
+  const isVictory = checkVictory(board);
+  if (isVictory) {
+    flagAllMines(board);
+    return {
+      gameStatus: status.WON,
+      board
+    };
+  }
+  return gameState;
 };

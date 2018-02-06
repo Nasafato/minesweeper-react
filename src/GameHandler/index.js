@@ -1,6 +1,10 @@
 import { initializeGameState } from "./initialization";
 import { difficulties, actions } from "./consts";
-import { handleFlagAction, handleUncoverAction } from "./handleActions";
+import {
+  handleFlagAction,
+  handleUncoverAction,
+  handleChordAction
+} from "./handleActions";
 export * from "./consts";
 
 export default class GameHandler {
@@ -42,6 +46,8 @@ export default class GameHandler {
       this.gameState = handleUncoverAction(coord, board, this.gameState);
     } else if (action === actions.FLAG) {
       this.gameState = handleFlagAction(coord, board, this.gameState);
+    } else if (action === actions.CHORD) {
+      this.gameState = handleChordAction(coord, board, this.gameState);
     }
 
     return this.gameState;

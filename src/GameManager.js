@@ -9,9 +9,7 @@ export default class GameManager extends React.Component {
     this.state = {
       gameState: this.gameHandler.getInitialGameState(),
       justChorded: false,
-      rightMouseHeld: false,
-      justLeft: null,
-      justEntered: null
+      rightMouseHeld: false
     };
   }
 
@@ -67,6 +65,8 @@ export default class GameManager extends React.Component {
 
   resetGame = () => {
     this.setState({
+      justChorded: false,
+      rightMouseHeld: false,
       gameState: this.gameHandler.resetGame()
     });
   };

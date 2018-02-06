@@ -27,3 +27,16 @@ export const iterateThroughBoard = func => {
     }
   };
 };
+
+export const getSquare = (board, coord) => {
+  const { x, y } = coord;
+  return board[x][y];
+};
+
+export const setSquare = (board, coord, values) => {
+  const { x, y } = coord;
+  board[x][y] = {
+    ...board[x][y],
+    ...values
+  };
+};

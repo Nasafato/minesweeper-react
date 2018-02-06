@@ -49,6 +49,7 @@ const updateNeighboringMinesCount = board => {
 
 export const initializeGameState = (maxX, maxY, totalMines) => {
   const board = [];
+  // 1) Create all squares
   for (let i = 0; i < maxX; i++) {
     board.push([]);
     for (let j = 0; j < maxY; j++) {
@@ -65,12 +66,14 @@ export const initializeGameState = (maxX, maxY, totalMines) => {
     }
   }
 
+  // 2) Create the mine coordinates
   const mines = createMines(maxX, maxY, totalMines);
   mines.forEach(function addMines(mineCoord) {
     const { x, y } = mineCoord;
     board[x][y].isMine = true;
   });
 
+  // 3) Update the neighboring mines count for each square
   updateNeighboringMinesCount(board);
 
   return {

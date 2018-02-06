@@ -1,5 +1,6 @@
 import { initializeGameState } from "./initialization";
 import { status, difficulties, actions } from "./consts";
+import { handleFlagAction, handleUncoverAction } from "./handleActions";
 export * from "./consts";
 
 export default class GameHandler {
@@ -38,45 +39,10 @@ export default class GameHandler {
     const { board } = this.gameState;
     const { x, y } = coord;
 
-    console.log("Action is ", action);
     if (action === actions.UNCOVER) {
-      if (board[x][y].isFlagged) {
-        board[x][y].isFlagged = false;
-        return {
-          ...this.gameState,
-          board
-        };
-      }
-      // If coord is a mine, set game state to lost
-      // Set all mines' state to isOpen
-      if (board[x][y].isMine) {
-        board[x][y].isOpen = true;
-        return {
-          board: board,
-          gameStatus: status.LOST
-        };
-      }
-
-      // If coord is empty, set square state to open
-      if (!board[x][y].isOpen) {
-        // TODO: Deep copy the board?
-        board[x][y].isOpen = true;
-        return {
-          ...this.gameState,
-          board
-        };
-      }
+      handleUncoverAction(coord, board, this.gameState);
     } else if (action === actions.FLAG) {
-      // If it's already been flagged, unflag the square
-      if (board[x][y].isOpen) {
-        return this.gameState;
-      }
-
-      board[x][y].isFlagged = !board[x][y].isFlagged;
-      return {
-        ...this.gameState,
-        board
-      };
+      handleFlagAction(coord, board, this.gameState);
     }
 
     return this.gameState;

@@ -42,6 +42,7 @@ export default class GameManager extends React.Component {
   };
 
   resetGame = () => {
+    this.clickManager.reset();
     this.setState({
       gameState: this.gameHandler.resetGame()
     });

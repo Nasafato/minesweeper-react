@@ -34,4 +34,9 @@ export default class ClickManager {
 
     return action;
   };
+
+  reset = () => {
+    this.justChorded = false;
+    this.rightMouseHeld = false;
+  };
 }

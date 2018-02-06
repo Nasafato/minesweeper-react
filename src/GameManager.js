@@ -15,7 +15,6 @@ export default class GameManager extends React.Component {
     if (this.state.gameState.gameStatus === status.LOST) {
       return;
     }
-    let nextState = this.state.gameState;
     let action = actions.UNCOVER;
     if (e.type === "contextmenu") {
       // right click

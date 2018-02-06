@@ -58,7 +58,7 @@ const showMines = board => {
 
 export const handleUncoverAction = (coord, board, gameState) => {
   const { x, y } = coord;
-  const { isFlagged, isMine, isOpen, neighboringMinesCount } = board[x][y];
+  const { isFlagged, isMine, isOpen } = board[x][y];
   if (isOpen) {
     return gameState;
   }

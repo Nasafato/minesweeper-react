@@ -1,7 +1,6 @@
 import { initializeGameState } from "./initialization";
-import { status, difficulties, actions } from "./consts";
+import { difficulties, actions } from "./consts";
 import { handleFlagAction, handleUncoverAction } from "./handleActions";
-import uuidv1 from "uuid/v1";
 export * from "./consts";
 
 export default class GameHandler {
@@ -38,19 +37,6 @@ export default class GameHandler {
 
   getNextGameState = (coord, action) => {
     const { board } = this.gameState;
-    const { x, y } = coord;
-
-    const id = uuidv1();
-    console.log(
-      "Action is ",
-      action,
-      " coord is ",
-      coord,
-      " id is ",
-      id,
-      " game state is ",
-      this.gameState
-    );
 
     if (action === actions.UNCOVER) {
       this.gameState = handleUncoverAction(coord, board, this.gameState);
@@ -58,7 +44,6 @@ export default class GameHandler {
       this.gameState = handleFlagAction(coord, board, this.gameState);
     }
 
-    console.log("id is ", id, " game state is ", this.gameState);
     return this.gameState;
   };
 
@@ -68,6 +53,5 @@ export default class GameHandler {
     let totalMines = 10;
     this.gameState = initializeGameState(maxX, maxY, totalMines);
     return this.gameState;
-    console.log("Resetting game");
   }
 }

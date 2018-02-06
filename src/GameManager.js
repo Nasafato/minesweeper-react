@@ -1,11 +1,13 @@
 import React from "react";
-import GameHandler, { actions, difficulties, status } from "./GameHandler";
+import GameHandler, { difficulties, status } from "./GameHandler";
+import ClickManager from "./ClickManager";
 import GameSquare from "./GameSquare";
 
 export default class GameManager extends React.Component {
   constructor(props) {
     super(props);
     this.gameHandler = new GameHandler(difficulties.EASY);
+    this.clickManager = new ClickManager();
     this.state = {
       gameState: this.gameHandler.getInitialGameState(),
       justChorded: false,
@@ -14,9 +16,7 @@ export default class GameManager extends React.Component {
   }
 
   onMouseDown = e => {
-    if (e.button === 2) {
-      this.setState({ rightMouseHeld: true });
-    }
+    this.clickManager.onMouseDown(e);
   };
 
   // This should all be outside of the gameManager, for performance reasons
@@ -28,31 +28,7 @@ export default class GameManager extends React.Component {
       return;
     }
 
-    let action = actions.UNCOVER;
-    // If left click and right is held, chord
-    if (e.button === 0 && this.state.rightMouseHeld) {
-      action = actions.CHORD;
-      this.setState({
-        justChorded: true
-      });
-      // If normal left click, uncover
-    } else if (e.button === 0) {
-      action = actions.UNCOVER;
-    } else if (e.button === 2 && !this.state.justChorded) {
-      // if right button up and haven't just chorded (meaning we didn't hold down left click), then normal right click
-      action = actions.FLAG;
-      this.setState({
-        rightMouseHeld: false
-      });
-
-      // Otherwise, means we don't need to do anything
-    } else if (e.button === 2) {
-      action = actions.NONE;
-      this.setState({
-        justChorded: false,
-        rightMouseHeld: false
-      });
-    }
+    const action = this.clickManager.onMouseUp(e, coord);
 
     this.setState({
       gameState: this.gameHandler.getNextGameState(coord, action)
@@ -61,13 +37,10 @@ export default class GameManager extends React.Component {
 
   onSquareClick = e => {
     e.preventDefault();
-    // If game is lost, don't allow further board changes
   };
 
   resetGame = () => {
     this.setState({
-      justChorded: false,
-      rightMouseHeld: false,
       gameState: this.gameHandler.resetGame()
     });
   };

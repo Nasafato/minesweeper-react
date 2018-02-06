@@ -64,7 +64,7 @@ export const handleUncoverAction = (coord, board, gameState) => {
   }
 
   if (isFlagged) {
-    board[x][y] = !isFlagged;
+    board[x][y].isFlagged = !isFlagged;
     return {
       ...gameState,
       board

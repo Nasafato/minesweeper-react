@@ -13,5 +13,7 @@ export const status = {
 
 export const actions = {
   UNCOVER: "UNCOVER",
-  FLAG: "FLAG"
+  FLAG: "FLAG",
+  CHORD: "CHORD",
+  NONE: "NONE"
 };

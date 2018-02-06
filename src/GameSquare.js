@@ -55,8 +55,8 @@ const GameSquare = ({
   onClick,
   coord,
   neighboringMinesCount,
-  onMouseEnter,
-  onMouseLeave
+  onMouseUp,
+  onMouseDown
 }) => (
   <Square
     onClick={onClick}
@@ -64,8 +64,8 @@ const GameSquare = ({
     isOpen={isOpen}
     isFlagged={isFlagged}
     isMine={isMine}
-    onMouseEnter={onMouseEnter}
-    onMouseLeave={onMouseLeave}
+    onMouseUp={onMouseUp}
+    onMouseDown={onMouseDown}
   >
     {isOpen && !isMine ? (
       <Number count={neighboringMinesCount}>

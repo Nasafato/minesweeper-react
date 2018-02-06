@@ -27,6 +27,8 @@ export default class GameBoard extends React.Component {
     if (e.type === "contextmenu") {
       // right click
       action = actions.FLAG;
+      // preventDefault is necessary because context menu will still
+      // open on the element itself
       e.preventDefault();
     } else if (e.type === "click") {
       action = actions.UNCOVER;

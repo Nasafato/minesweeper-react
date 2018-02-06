@@ -22,14 +22,23 @@ const Square = styled.div`
   ${squareColor};
 `;
 
-const GameSquare = ({ isOpen, isMine, isFlagged, onClick, coord }) => (
+const GameSquare = ({
+  isOpen,
+  isMine,
+  isFlagged,
+  onClick,
+  coord,
+  neighboringMinesCount
+}) => (
   <Square
     onClick={onClick}
     onContextMenu={onClick}
     isOpen={isOpen}
     isFlagged={isFlagged}
     isMine={isMine}
-  />
+  >
+    {isOpen && !isMine ? <span>{neighboringMinesCount}</span> : null}
+  </Square>
 );
 
 export default GameSquare;

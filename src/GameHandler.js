@@ -51,18 +51,18 @@ const getNeighbors = (x, y, board) => {
   const minX = 0;
   const minY = 0;
   const neighborCoords = [];
-  if (x - 1 >= minX) {
-    neighborCoords.push({ x: x - 1, y });
+  for (let i = x - 1; i <= x + 1; i++) {
+    for (let j = y - 1; j <= y + 1; j++) {
+      if (i < minX || i > maxX || j < minY || j > maxY) {
+        continue;
+      }
+      if (x === i && y === j) {
+        continue;
+      }
+      neighborCoords.push({ x: i, y: j });
+    }
   }
-  if (x + 1 <= maxX) {
-    neighborCoords.push({ x: x + 1, y });
-  }
-  if (y - 1 >= minY) {
-    neighborCoords.push({ x, y: y - 1 });
-  }
-  if (y + 1 <= maxY) {
-    neighborCoords.push({ x, y: y + 1 });
-  }
+  console.log(neighborCoords);
   return neighborCoords;
 };
 

@@ -11,11 +11,16 @@ export const status = {
   WON: "WON"
 };
 
+export const actions = {
+  UNCOVER: "UNCOVER",
+  FLAG: "FLAG"
+};
+
 const getRandomMine = (maxX, maxY) => {
-  const x = Math.floor(Math.random() * maxX)
-  const y = Math.floor(Math.random() * maxY)
-  return { x, y }
-}
+  const x = Math.floor(Math.random() * maxX);
+  const y = Math.floor(Math.random() * maxY);
+  return { x, y };
+};
 
 const createMines = (maxX, maxY, totalMines) => {
   const mines = [];
@@ -27,7 +32,7 @@ const createMines = (maxX, maxY, totalMines) => {
       }
     }
     return false;
-  }
+  };
 
   let createdMines = 0;
   while (createdMines < totalMines) {
@@ -38,22 +43,22 @@ const createMines = (maxX, maxY, totalMines) => {
     }
   }
   return mines;
-}
+};
 
 const initializeGameState = (maxX, maxY, totalMines) => {
-  const board = []
+  const board = [];
   for (let i = 0; i < maxX; i++) {
-    board.push([])
+    board.push([]);
     for (let j = 0; j < maxY; j++) {
       board[i].push({
         coord: {
           x: i,
-          y: j,
+          y: j
         },
         isMine: false,
         isOpen: false,
         isFlagged: false
-      })
+      });
     }
   }
 
@@ -65,9 +70,8 @@ const initializeGameState = (maxX, maxY, totalMines) => {
   return {
     board,
     gameStatus: status.READY
-  }
-}
-
+  };
+};
 
 export default class GameHandler {
   constructor(difficulty) {
@@ -99,33 +103,53 @@ export default class GameHandler {
 
   getInitialGameState = () => {
     return this.gameState;
-  }
+  };
 
-  getNextGameState = (coord) => {
+  getNextGameState = (coord, action) => {
     const { board } = this.gameState;
     const { x, y } = coord;
-    // If coord is a mine, set game state to lost
-    // Set all mines' state to isOpen
-    if (board[x][y].isMine) {
-      board[x][y].isOpen = true;
-      return {
-        board: board,
-        gameStatus: status.LOST
-      }
-    }
 
-    // If coord is empty, set square state to open
-    if (!board[x][y].isOpen) {
-      // TODO: Deep copy the board?
-      board[x][y].isOpen = true;
+    console.log("Action is ", action);
+    if (action === actions.UNCOVER) {
+      if (board[x][y].isFlagged) {
+        board[x][y].isFlagged = false;
+        return {
+          ...this.gameState,
+          board
+        };
+      }
+      // If coord is a mine, set game state to lost
+      // Set all mines' state to isOpen
+      if (board[x][y].isMine) {
+        board[x][y].isOpen = true;
+        return {
+          board: board,
+          gameStatus: status.LOST
+        };
+      }
+
+      // If coord is empty, set square state to open
+      if (!board[x][y].isOpen) {
+        // TODO: Deep copy the board?
+        board[x][y].isOpen = true;
+        return {
+          ...this.gameState,
+          board
+        };
+      }
+    } else if (action === actions.FLAG) {
+      // If it's already been flagged, unflag the square
+      if (board[x][y].isOpen) {
+        return this.gameState;
+      }
+
+      board[x][y].isFlagged = !board[x][y].isFlagged;
       return {
         ...this.gameState,
         board
-      }
+      };
     }
 
-
-
     return this.gameState;
-  }
+  };
 }

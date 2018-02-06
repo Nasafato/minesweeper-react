@@ -61,4 +61,13 @@ export default class GameHandler {
     console.log("id is ", id, " game state is ", this.gameState);
     return this.gameState;
   };
+
+  resetGame() {
+    let maxX = 8;
+    let maxY = 8;
+    let totalMines = 10;
+    this.gameState = initializeGameState(maxX, maxY, totalMines);
+    return this.gameState;
+    console.log("Resetting game");
+  }
 }

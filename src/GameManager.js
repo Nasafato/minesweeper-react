@@ -31,6 +31,12 @@ export default class GameManager extends React.Component {
     });
   };
 
+  resetGame = () => {
+    this.setState({
+      gameState: this.gameHandler.resetGame()
+    });
+  };
+
   render() {
     const squares = [];
     this.state.gameState.board.forEach(function handleRow(row) {
@@ -45,6 +51,11 @@ export default class GameManager extends React.Component {
       }, this);
     }, this);
 
-    return this.props.children({ squares });
+    const { gameStatus } = this.state.gameState;
+    return this.props.children({
+      squares,
+      resetGame: this.resetGame,
+      gameStatus
+    });
   }
 }

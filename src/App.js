@@ -3,6 +3,7 @@ import logo from "./logo.svg";
 import GameManager from "./GameManager";
 import "./App.css";
 import styled from "styled-components";
+import { status } from "./GameHandler";
 
 const Board = styled.div`
   width: 400px;
@@ -12,17 +13,22 @@ const Board = styled.div`
   display: flex;
   flex-wrap: wrap;
 `;
+
+const Header = styled.div`
+  height: 200px;
+`;
 // return <Board>{squares}</Board>;
 class App extends Component {
   render() {
     return (
       <GameManager>
-        {({ squares, onSquareClick }) => (
+        {({ squares, gameStatus, resetGame }) => (
           <div className="App">
-            <header className="App-header">
+            <Header>
               <img src={logo} className="App-logo" alt="logo" />
-              <h1 className="App-title">Welcome to React</h1>
-            </header>
+              <h1 className="App-title">{gameStatus}</h1>
+              <button onClick={resetGame}>Reset</button>
+            </Header>
             <Board>{squares}</Board>
           </div>
         )}

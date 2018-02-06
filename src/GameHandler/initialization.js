@@ -1,4 +1,4 @@
-import { getNeighbors } from "./utils";
+import { getNeighbors, iterateThroughBoard } from "./utils";
 import { status } from "./consts";
 
 const getRandomMine = (maxX, maxY) => {
@@ -30,8 +30,8 @@ const createMines = (maxX, maxY, totalMines) => {
   return mines;
 };
 
-const updateNeighboringMinesCount = board => {
-  const updateNeighbors = (x, y) => {
+const updateNeighboringMinesCount = iterateThroughBoard(
+  function updateNeighbors(x, y, board) {
     const neighbors = getNeighbors(x, y, board);
     if (!board[x][y].isMine) {
       return;
@@ -39,13 +39,8 @@ const updateNeighboringMinesCount = board => {
     neighbors.forEach(function updateNeighbor({ x: neighborX, y: neighborY }) {
       board[neighborX][neighborY].neighboringMinesCount++;
     });
-  };
-  for (let i = 0; i < board.length; i++) {
-    for (let j = 0; j < board[i].length; j++) {
-      updateNeighbors(i, j);
-    }
   }
-};
+);
 
 export const initializeGameState = (maxX, maxY, totalMines) => {
   const board = [];

@@ -46,11 +46,21 @@ const openSquare = (coord, board) => {
   });
 };
 
+const showMines = board => {
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[0].length; j++) {
+      if (board[i][j].isMine) {
+        board[i][j].isOpen = true;
+      }
+    }
+  }
+};
+
 export const handleUncoverAction = (coord, board, gameState) => {
   const { x, y } = coord;
   const { isFlagged, isMine, isOpen, neighboringMinesCount } = board[x][y];
   if (isOpen) {
-    return;
+    return gameState;
   }
 
   if (isFlagged) {
@@ -62,6 +72,7 @@ export const handleUncoverAction = (coord, board, gameState) => {
   }
 
   if (isMine) {
+    showMines(board);
     board[x][y].isOpen = true;
     return {
       ...gameState,

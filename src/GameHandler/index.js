@@ -1,6 +1,7 @@
 import { initializeGameState } from "./initialization";
 import { status, difficulties, actions } from "./consts";
 import { handleFlagAction, handleUncoverAction } from "./handleActions";
+import uuidv1 from "uuid/v1";
 export * from "./consts";
 
 export default class GameHandler {
@@ -39,12 +40,25 @@ export default class GameHandler {
     const { board } = this.gameState;
     const { x, y } = coord;
 
+    const id = uuidv1();
+    console.log(
+      "Action is ",
+      action,
+      " coord is ",
+      coord,
+      " id is ",
+      id,
+      " game state is ",
+      this.gameState
+    );
+
     if (action === actions.UNCOVER) {
-      handleUncoverAction(coord, board, this.gameState);
+      this.gameState = handleUncoverAction(coord, board, this.gameState);
     } else if (action === actions.FLAG) {
-      handleFlagAction(coord, board, this.gameState);
+      this.gameState = handleFlagAction(coord, board, this.gameState);
     }
 
+    console.log("id is ", id, " game state is ", this.gameState);
     return this.gameState;
   };
 }

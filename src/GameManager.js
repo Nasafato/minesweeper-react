@@ -1,18 +1,8 @@
 import React from "react";
 import GameHandler, { actions, difficulties, status } from "./GameHandler";
 import GameSquare from "./GameSquare";
-import styled from "styled-components";
 
-const Board = styled.div`
-  width: 400px;
-  height: 400px;
-  margin: 0 auto;
-  background-color: grey;
-  display: flex;
-  flex-wrap: wrap;
-`;
-
-export default class GameBoard extends React.Component {
+export default class GameManager extends React.Component {
   constructor(props) {
     super(props);
     this.gameHandler = new GameHandler(difficulties.EASY);
@@ -22,6 +12,9 @@ export default class GameBoard extends React.Component {
   }
 
   onSquareClick = (e, coord) => {
+    if (this.state.gameState.gameStatus === status.LOST) {
+      return;
+    }
     let nextState = this.state.gameState;
     let action = actions.UNCOVER;
     if (e.type === "contextmenu") {
@@ -52,6 +45,6 @@ export default class GameBoard extends React.Component {
       }, this);
     }, this);
 
-    return <Board>{squares}</Board>;
+    return this.props.children({ squares });
   }
 }

@@ -19,6 +19,7 @@ export default class GameManager extends React.Component {
     }
   };
 
+  // This should all be outside of the gameManager, for performance reasons
   onMouseUp = (e, coord) => {
     if (
       this.state.gameState.gameStatus === status.LOST ||
@@ -75,13 +76,17 @@ export default class GameManager extends React.Component {
     const squares = [];
     this.state.gameState.board.forEach(function handleRow(row) {
       row.forEach(function handleSquare(square) {
+        const { isFlagged, isOpen, isMine, neighboringMinesCount } = square;
         squares.push(
           <GameSquare
             onMouseDown={e => this.onMouseDown(e, square.coord)}
             onMouseUp={e => this.onMouseUp(e, square.coord)}
             onClick={this.onSquareClick}
             key={`${square.coord.x}-${square.coord.y}`}
-            {...square}
+            isFlagged={isFlagged}
+            isOpen={isOpen}
+            isMine={isMine}
+            neighboringMinesCount={neighboringMinesCount}
           />
         );
       }, this);

@@ -46,35 +46,54 @@ const numberColor = ({ count }) => {
 const Number = styled.span`
   font-size: 24px;
   ${numberColor};
+  display: ${props => (props.isOpen ? "inline" : "none")};
 `;
 
-const GameSquare = ({
-  isOpen,
-  isMine,
-  isFlagged,
-  onClick,
-  coord,
-  neighboringMinesCount,
-  onMouseUp,
-  onMouseDown
-}) => (
-  <Square
-    onClick={onClick}
-    onContextMenu={onClick}
-    isOpen={isOpen}
-    isFlagged={isFlagged}
-    isMine={isMine}
-    onMouseUp={onMouseUp}
-    onMouseDown={onMouseDown}
-  >
-    {isOpen && !isMine ? (
-      <Number count={neighboringMinesCount}>
-        <strong>
-          {neighboringMinesCount === 0 ? " " : neighboringMinesCount}
-        </strong>
-      </Number>
-    ) : null}
-  </Square>
-);
+class GameSquare extends React.Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    const { isFlagged, isMine, isOpen } = this.props;
+    if (
+      isFlagged === nextProps.isFlagged &&
+      isMine === nextProps.isMine &&
+      isOpen === nextProps.isOpen
+    ) {
+      return false;
+    }
+    return true;
+  }
+
+  render() {
+    const {
+      onClick,
+      isOpen,
+      isFlagged,
+      isMine,
+      onMouseUp,
+      onMouseDown,
+      neighboringMinesCount
+    } = this.props;
+    return (
+      <Square
+        onClick={onClick}
+        onContextMenu={onClick}
+        isOpen={isOpen}
+        isFlagged={isFlagged}
+        isMine={isMine}
+        onMouseUp={onMouseUp}
+        onMouseDown={onMouseDown}
+      >
+        {!isOpen || isMine ? null : (
+          <Number count={neighboringMinesCount} isOpen={isOpen}>
+            <strong>
+              {neighboringMinesCount === 0 || isMine
+                ? " "
+                : neighboringMinesCount}
+            </strong>
+          </Number>
+        )}
+      </Square>
+    );
+  }
+}
 
 export default GameSquare;

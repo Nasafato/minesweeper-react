@@ -1,10 +1,5 @@
 import { status } from "./consts";
-import {
-  iterateThroughBoard,
-  getNeighbors,
-  getSquare,
-  setSquare
-} from "./utils";
+import { iterateThroughBoard, getNeighbors, getSquare } from "./utils";
 
 // checkVictory examines the board and sees if the game is done
 // This means that every square that doesn't contain a mine

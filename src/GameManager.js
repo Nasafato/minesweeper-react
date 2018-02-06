@@ -12,7 +12,11 @@ export default class GameManager extends React.Component {
   }
 
   onSquareClick = (e, coord) => {
-    if (this.state.gameState.gameStatus === status.LOST) {
+    // If game is lost, don't allow further board changes
+    if (
+      this.state.gameState.gameStatus === status.LOST ||
+      this.state.gameState.gameStatus === status.WON
+    ) {
       return;
     }
     let action = actions.UNCOVER;

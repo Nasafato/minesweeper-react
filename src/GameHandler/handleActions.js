@@ -1,5 +1,5 @@
 import { status } from "./consts";
-import { getNeighbors } from "./utils";
+import { iterateThroughBoard, getNeighbors } from "./utils";
 
 // checkVictory examines the board and sees if the game is done
 // This means that every square that doesn't contain a mine
@@ -8,18 +8,16 @@ const checkVictory = board => {
   let totalOpened = 0;
   let totalMines = 0;
   let totalSquares = 0;
-  for (let i = 0; i < board.length; i++) {
-    for (let j = 0; j < board[0].length; j++) {
-      const { isOpen, isMine } = board[i][j];
-      if (isOpen && !isMine) {
-        totalOpened++;
-      }
-      if (isMine) {
-        totalMines++;
-      }
-      totalSquares++;
+  iterateThroughBoard(function tally(i, j, board) {
+    const { isOpen, isMine } = board[i][j];
+    if (isOpen && !isMine) {
+      totalOpened++;
     }
-  }
+    if (isMine) {
+      totalMines++;
+    }
+    totalSquares++;
+  })(board);
   return totalSquares === totalMines + totalOpened;
 };
 
@@ -46,15 +44,17 @@ const openSquare = (coord, board) => {
   });
 };
 
-const showMines = board => {
-  for (let i = 0; i < board.length; i++) {
-    for (let j = 0; j < board[0].length; j++) {
-      if (board[i][j].isMine) {
-        board[i][j].isOpen = true;
-      }
-    }
+const showMines = iterateThroughBoard((i, j, board) => {
+  if (board[i][j].isMine) {
+    board[i][j].isOpen = true;
   }
-};
+});
+
+const flagAllMines = iterateThroughBoard((i, j, board) => {
+  if (board[i][j].isMine && !board[i][j].isFlagged) {
+    board[i][j].isFlagged = true;
+  }
+});
 
 export const handleUncoverAction = (coord, board, gameState) => {
   const { x, y } = coord;
@@ -86,6 +86,7 @@ export const handleUncoverAction = (coord, board, gameState) => {
   // check victory condition here
   const isVictory = checkVictory(board);
   if (isVictory) {
+    flagAllMines(board);
     return {
       gameStatus: status.WON,
       board

@@ -17,3 +17,13 @@ export const getNeighbors = (x, y, board) => {
   }
   return neighborCoords;
 };
+
+export const iterateThroughBoard = func => {
+  return function(board) {
+    for (let i = 0; i < board.length; i++) {
+      for (let j = 0; j < board[0].length; j++) {
+        func(i, j, board);
+      }
+    }
+  };
+};

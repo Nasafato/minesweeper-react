@@ -20,8 +20,8 @@ class App extends Component {
   render() {
     return (
       <GameManager>
-        {({ squares, gameStatus, resetGame }) => (
-          <div className="App">
+        {({ squares, gameStatus, resetGame, onMouseUp, onMouseDown }) => (
+          <div className="App" onMouseDown={onMouseDown} onMouseUp={onMouseUp}>
             <Header>
               <img src={logo} className="App-logo" alt="logo" />
               <h1 className="App-title">{gameStatus}</h1>

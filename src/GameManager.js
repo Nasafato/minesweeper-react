@@ -9,9 +9,7 @@ export default class GameManager extends React.Component {
     this.gameHandler = new GameHandler(difficulties.EASY);
     this.clickManager = new ClickManager();
     this.state = {
-      gameState: this.gameHandler.getInitialGameState(),
-      justChorded: false,
-      rightMouseHeld: false
+      gameState: this.gameHandler.getInitialGameState()
     };
   }
 
